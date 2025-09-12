@@ -29,11 +29,13 @@ jobs:
         if: contains('admin write', fromJson(steps.user_permission.outputs.data).permission)
         id: dispatch
         uses: actions/github-script@v6
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
         with:
           github-token: ${{ steps.generate_axon_bot_token.outputs.token }}
           script: |
             const dispatch = {
-              comment_body: `${{ github.event.comment.body }}`,
+              comment_body: process.env.COMMENT_BODY,
               repo: context.repo,
               issue: context.issue,
             };
